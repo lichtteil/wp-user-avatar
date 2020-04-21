@@ -69,16 +69,25 @@ class WP_User_Avatar_Setup {
   /**
    * Load WP User Avatar
    * @since 1.9.2
+   * @uses bool $wpua_tinymce
    * @uses is_admin()
    */
   private function _load_wpua() {
+    global $wpua_tinymce;
     require_once(WPUA_INC.'wpua-globals.php');
     require_once(WPUA_INC.'wpua-functions.php');
     require_once(WPUA_INC.'class-wp-user-avatar-admin.php');
     require_once(WPUA_INC.'class-wp-user-avatar.php');
     require_once(WPUA_INC.'class-wp-user-avatar-functions.php');
+    require_once(WPUA_INC.'class-wp-user-avatar-shortcode.php');
     require_once(WPUA_INC.'class-wp-user-avatar-subscriber.php');
     require_once(WPUA_INC.'class-wp-user-avatar-update.php');
+    require_once(WPUA_INC.'class-wp-user-avatar-widget.php');
+    
+    // Load TinyMCE only if enabled
+    if((bool) $wpua_tinymce == 1) {
+      require_once(WPUA_INC.'wpua-tinymce.php');
+    }
 
   }
 }

@@ -60,7 +60,25 @@ class WP_User_Avatar_Admin {
     add_option('wp_user_avatar_resize_h', '96');
     add_option('wp_user_avatar_resize_upload', '0');
     add_option('wp_user_avatar_resize_w', '96');
-    add_option('wp_user_avatar_upload_size_limit', '0');
+    add_option('wp_user_avatar_tinymce', '1');
+    add_option('wp_user_avatar_upload_size_limit', '0');	
+
+    if(wp_next_scheduled( 'wpua_has_gravatar_cron_hook' )){
+      $cron=get_option('cron');
+      $new_cron='';
+      foreach($cron as $key=>$value)
+      {
+        if(is_array($value))
+        {
+        if(array_key_exists('wpua_has_gravatar_cron_hook',$value))
+        unset($cron[$key]);
+        }
+      }
+      update_option('cron',$cron);
+  }
+
+
+
   }
 
   /**
@@ -94,6 +112,9 @@ class WP_User_Avatar_Admin {
   public function wpua_admin() {
     add_menu_page(__('WP User Avatar', 'wp-user-avatar'), __('Avatars', 'wp-user-avatar'), 'manage_options', 'wp-user-avatar', array($this, 'wpua_options_page'), WPUA_URL.'images/wpua-icon.png');
     add_submenu_page('wp-user-avatar', __('Settings' , 'wp-user-avatar'), __('Settings' , 'wp-user-avatar'), 'manage_options', 'wp-user-avatar', array($this, 'wpua_options_page'));
+    $hook = add_submenu_page('wp-user-avatar', __('Library','wp-user-avatar'), __('Library', 'wp-user-avatar'), 'manage_options', 'wp-user-avatar-library', array($this, 'wpua_media_page'));
+    add_action("load-$hook", array($this, 'wpua_media_screen_option'));
+    add_filter('set-screen-option', array($this, 'wpua_set_media_screen_option'), 10, 3);
   }
 
   /**
@@ -106,6 +127,42 @@ class WP_User_Avatar_Admin {
     global $pagenow;
     $is_menu_page = ($pagenow == 'admin.php' && isset($_GET['page']) && $_GET['page'] == 'wp-user-avatar') ? true : false;
     return (bool) $is_menu_page;
+  }
+
+  /**
+   * Media page
+   * @since 1.8
+   */
+  public function wpua_media_page() {
+    require_once(WPUA_INC.'wpua-media-page.php');
+  }
+
+  /**
+   * Avatars per page
+   * @since 1.8.10
+   * @uses add_screen_option()
+   */
+  public function wpua_media_screen_option() {
+    $option = 'per_page';
+    $args = array(
+      'label' => __('Avatars','wp-user-avatar'),
+      'default' => 10,
+      'option' => 'upload_per_page'
+    );
+    add_screen_option($option, $args);
+  }
+
+  /**
+   * Save per page setting
+   * @since 1.8.10
+   * @param int $status
+   * @param string $option
+   * @param int $value
+   * @return int $status
+   */
+  public function wpua_set_media_screen_option($status, $option, $value) {
+    $status = ($option == 'upload_per_page') ? $value : $status;
+    return $status;
   }
 
   /**
@@ -129,6 +186,7 @@ class WP_User_Avatar_Admin {
     $settings[] = register_setting('wpua-settings-group', 'avatar_default');
     $settings[] = register_setting('wpua-settings-group', 'avatar_default_wp_user_avatar');
     $settings[] = register_setting('wpua-settings-group', 'show_avatars', 'intval');
+    $settings[] = register_setting('wpua-settings-group', 'wp_user_avatar_tinymce', 'intval');
     $settings[] = register_setting('wpua-settings-group', 'wp_user_avatar_allow_upload', 'intval');
     $settings[] = register_setting('wpua-settings-group', 'wp_user_avatar_disable_gravatar', 'intval');
     $settings[] = register_setting('wpua-settings-group', 'wp_user_avatar_edit_avatar', 'intval');
@@ -288,6 +346,19 @@ class WP_User_Avatar_Admin {
       $value = $wpua_image;
     }
     return $value;
+  }
+
+  /**
+   * Get list table
+   * @since 1.8
+   * @param string $class
+   * @param array $args
+   * @return object
+   */
+  public function _wpua_get_list_table($class, $args = array()) {
+    require_once(WPUA_INC.'class-wp-user-avatar-list-table.php');
+    $args['screen'] = 'wp-user-avatar';
+    return new $class($args);
   }
 
   /**

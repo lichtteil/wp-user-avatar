@@ -170,6 +170,7 @@ class WP_User_Avatar {
     // Chck if admin page
     $is_admin = is_admin() ? '_admin' : "";
   ?>
+    <?php do_action('wpua_before_avatar'.$is_admin); ?>
     <input type="hidden" name="wp-user-avatar" id="<?php echo ($user=='add-new-user') ? 'wp-user-avatar' : 'wp-user-avatar-existing'?>" value="<?php echo $wpua; ?>" />
     <?php if($wp_user_avatar->wpua_is_author_or_above()) : // Button to launch Media Uploader ?>
       
@@ -202,6 +203,7 @@ class WP_User_Avatar {
       </p>
       <p id="<?php echo ($user=='add-new-user') ? 'wpua-undo-button' : 'wpua-undo-button-existing'?>"><button type="button" class="button" id="<?php echo ($user=='add-new-user') ? 'wpua-undo' : 'wpua-undo-existing'?>" name="wpua-undo"><?php _e('Undo','wp-user-avatar'); ?></button></p>
     </div>
+    <?php do_action('wpua_after_avatar'.$is_admin); ?>
   <?php
   }
 
