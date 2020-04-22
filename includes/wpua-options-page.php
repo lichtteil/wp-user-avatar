@@ -56,7 +56,6 @@ $wpua_options_page_title = apply_filters('wpua_options_page_title', $wpua_option
   <form method="post" action="<?php echo admin_url('options.php'); ?>">
     <?php settings_fields('wpua-settings-group'); ?>
     <?php do_settings_fields('wpua-settings-group', ""); ?>
-    <?php do_action('wpua_donation_message'); ?>
     <table class="form-table">
       <?php
         // Format settings in table rows
