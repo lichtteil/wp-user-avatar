@@ -371,7 +371,7 @@ This would output:
 == Changelog ==
 
 = 2.2.7 =
-* Removed learn more link in admin notice
+* Removed target blank from dismiss url of admin notice
 * Code enhancements and improvements.
 
 = 2.2.6 =
