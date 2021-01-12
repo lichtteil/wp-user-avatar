@@ -377,11 +377,14 @@ class WP_User_Avatar_Admin {
    */
   public function wpua_add_media_state($states) {
     global $post, $wpua_avatar_default;
-    $is_wpua = get_post_custom_values('_wp_attachment_wp_user_avatar', $post->ID);
+
+    $is_wpua = isset($post->ID) ? get_post_custom_values('_wp_attachment_wp_user_avatar', $post->ID) : '';
+
     if(!empty($is_wpua)) {
       $states[] = __('Profile Picture','wp-user-avatar');
     }
-    if(!empty($wpua_avatar_default) && ($wpua_avatar_default == $post->ID)) {
+
+    if(!empty($wpua_avatar_default) && isset($post->ID) && ($wpua_avatar_default == $post->ID)) {
       $states[] = __('Default Avatar','wp-user-avatar');
     }
     /**
