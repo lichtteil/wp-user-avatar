@@ -373,6 +373,8 @@ This would output:
 = 2.2.9 =
 * Fixed PHP Notice:  Trying to get property 'ID' of non-object.
 * Fixed Fatal Error: Cannot use string offset as an array.
+* Fixed: Deprecated: whitelist_options is deprecated since version 5.5.0
+* Increased the priority of user_profile_picture_description filter usage
 
 = 2.2.8 =
 * Fixed: Notice: Object of class WP_User could not be converted.
