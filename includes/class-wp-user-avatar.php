@@ -33,7 +33,9 @@ class WP_User_Avatar {
       add_action('user_new_form', array($this, 'wpua_action_show_user_profile'));
       add_action('user_register', array($this, 'wpua_action_process_option_update'));
 
-        add_filter('user_profile_picture_description', function ($description, $profileuser) {
+        // setting defaults for the filter callback fixes an error like https://wordpress.org/support/topic/error-missing-argument-2-for-wp_user_avatarclosure
+        // see https://stackoverflow.com/questions/37779680/missing-argument-2-for-a-custom-function
+        add_filter('user_profile_picture_description', function ($description = '', $profileuser = null) {
             ob_start();
             echo '<style>.user-profile-picture > td > .avatar {display: none;}</style>';
             self::wpua_core_show_user_profile($profileuser);
