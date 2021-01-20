@@ -26,9 +26,17 @@ class WP_User_Avatar {
     // Add WPUA to profile for users with permission
     if($this->wpua_is_author_or_above() || ((bool) $wpua_allow_upload == 1 && is_user_logged_in())) {
       // Profile functions and scripts
-      //add_action('show_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
+      add_action('show_user_profile', function($user) {
+          if(is_admin()) return;
+          $this->wpua_action_show_user_profile($user);
+      });
+
+      add_action('edit_user_profile', function($user) {
+          if(is_admin()) return;
+          $this->wpua_action_show_user_profile($user);
+      });
+
       add_action('personal_options_update', array($this, 'wpua_action_process_option_update'));
-      //add_action('edit_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
       add_action('edit_user_profile_update', array($this, 'wpua_action_process_option_update'));
       add_action('user_new_form', array($this, 'wpua_action_show_user_profile'));
       add_action('user_register', array($this, 'wpua_action_process_option_update'));
