@@ -472,20 +472,14 @@ class WP_User_Avatar_Functions {
           $wpua_final_avatar_image_src = str_replace('d=wp_user_avatar', 'd='.urlencode($wpua_default_avatar_image_src), $wpua_avatar_image_src);
         }
 
-       //$avatar = $avatar;
-       $avatar = sprintf(
-           '<img src="'.$wpua_final_avatar_image_src.'"'.$default_image_details['dimensions'].' alt="'.$alt.'" class="avatar avatar-'.$size.' wp-user-avatar wp-user-avatar-'.$size.' photo avatar-default%s" />',
-           esc_attr( implode( ' ', $class ) )
-       );
+       $avatar = '<img src="'.$wpua_final_avatar_image_src.'"'.$default_image_details['dimensions'].' alt="'.$alt.'" class="avatar avatar-'.$size.' wp-user-avatar wp-user-avatar-'.$size.' photo avatar-default'. esc_attr( implode( ' ', $class ) ) .'" />';
 
       // User doesn't have WPUA or Gravatar and Default Avatar is wp_user_avatar, show custom Default Avatar
       } elseif($avatar_default == 'wp_user_avatar') {
 
        $default_image_details = $this->wpua_default_image($size);
-       $avatar = sprintf(
-           '<img src="'.$default_image_details['src'].'"'.$default_image_details['dimensions'].' alt="'.$alt.'" class="avatar avatar-'.$size.' wp-user-avatar wp-user-avatar-'.$size.' photo avatar-default%s" />',
-           esc_attr( implode( ' ', $class ) )
-       );
+
+       $avatar = '<img src="'.$default_image_details['src'].'"'.$default_image_details['dimensions'].' alt="'.$alt.'" class="avatar avatar-'.$size.' wp-user-avatar wp-user-avatar-'.$size.' photo avatar-default'. esc_attr( implode( ' ', $class ) ) .'" />';
 
        return $avatar;
 
