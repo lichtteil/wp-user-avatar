@@ -33,7 +33,7 @@ class WP_User_Avatar_Setup {
    * @since 1.9.2
    */
   private function _define_constants() {
-    define('WPUA_VERSION', '2.2.14');
+    define('WPUA_VERSION', '2.2.15');
     define('WPUA_FOLDER', basename(dirname(__FILE__)));
     define('WPUA_DIR', plugin_dir_path(__FILE__));
     define('WPUA_INC', WPUA_DIR.'includes'.'/');
